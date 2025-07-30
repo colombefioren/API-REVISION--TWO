@@ -1,4 +1,5 @@
 import json
+from urllib import request
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -37,3 +38,11 @@ def verify_secret(secret : Secret):
     return Response(content=json.dumps({"message":f"Hello Secret : {secret.secret_code}"}),status_code=200)
 
 
+@app.get("/welcome")
+def welcome_display(request : Request):
+    request_type = request.headers.get("accept")
+    if request_type != "text/html" and request_type != "text/plain":
+        return Response(content=json.dumps({"message":"Media type not supported! Only plain text and html are supported"}),status_code=400)
+    with open("welcome.html","r",encoding="utf-8") as file:
+        html_content = file.read()
+        return Response(content=html_content,status_code=200,media_type="text/html")
