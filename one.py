@@ -84,7 +84,18 @@ def delete_event(event_name : str):
             return Response(content=json.dumps({"message":f"Event {event_name} deleted successfully!"}),status_code=200)
     return Response(content=json.dumps({"message":f"Event {event_name} not found!"}),status_code=404)
 
-
+@app.put("/events")
+def update_event(event_list : List[EventModel]):
+        for updated_event in event_list:
+            found = False
+            for i,original_event in enumerate(events_store):
+                if original_event.name == updated_event.name:
+                    events_store[i] = updated_event
+                    found = True
+                    break
+            if not found:
+                events_store.append(updated_event)
+        return Response(content=json.dumps(serialized_events_store()),status_code=201)
 
 @app.get("{full_path:path}")
 def catch_all(full_path : str):
