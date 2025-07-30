@@ -81,3 +81,11 @@ def add_event(event_list : List[EventModel]):
     for event in event_list:
         events_store.append(event)
     return Response(content=json.dumps(serialized_events_store()),status_code=201)
+
+@app.delete("/events/{event_name}")
+def delete_event(event_name : str):
+    for event in events_store:
+        if event.name == event_name:
+            events_store.remove(event)
+            return Response(content=json.dumps({"message":f"Event {event_name} deleted successfully!"}),status_code=200)
+    return Response(content=json.dumps({"message":f"Event {event_name} not found!"}),status_code=404)
