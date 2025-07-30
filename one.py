@@ -1,6 +1,7 @@
 import json
 
 from fastapi import FastAPI
+from pydantic import BaseModel
 from starlette.requests import Request
 from starlette.responses import Response
 
@@ -25,5 +26,14 @@ def read_top_secret(request : Request):
     elif key_value != "my-secret-key":
         return Response(content=json.dumps({"message":f"You did not provide the correct secret key : {key_value}"}),status_code=403)
     return Response(content=json.dumps({"message":"Hello Top Secret!"}),status_code=200)
+
+class Secret(BaseModel):
+    secret_code : int
+
+@app.get("/secret")
+def verify_secret(secret : Secret):
+    if len(str(secret.secret_code)) != 4:
+        return Response(content=json.dumps({"message":f"The secret code must be 4 digits!"}),status_code=400)
+    return Response(content=json.dumps({"message":f"Hello Secret : {secret.secret_code}"}),status_code=200)
 
 
