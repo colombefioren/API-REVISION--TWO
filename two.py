@@ -54,14 +54,14 @@ def get_event(events_id : int):
 def modify_event(event_list : List[Event]):
     for event in event_list:
         found = False
-        for stored_event,i in enumerate(events_store):
+        for i,stored_event in enumerate(events_store):
             if stored_event.id == event.id:
-                stored_event[i] = event
+                events_store[i] = event
                 found = True
                 break
         if not found:
             events_store.append(event)
-    return Response(content=json.dumps(serialized_events_store()),status_code=404,media_type="application/json")
+    return Response(content=json.dumps(serialized_events_store()),status_code=200,media_type="application/json")
 
 class EventUpdated(BaseModel):
     id : Optional[int] = None,
