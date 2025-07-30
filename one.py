@@ -1,4 +1,5 @@
 import json
+from typing import List
 from urllib import request
 
 from fastapi import FastAPI
@@ -50,6 +51,24 @@ def welcome_display(request : Request):
         html_content = file.read()
         return Response(content=html_content,status_code=200,media_type="text/html")
 
+class EventModel(BaseModel):
+    name : str
+    description : str
+    start_date : str
+    end_date : str
+
+events_store : List[EventModel] = []
+
+def serialized_events_store():
+    converted_event = []
+    for event in events_store:
+        converted_event.append(event.model_dump())
+    return converted_event
+
+
+@app.get("/events")
+def get_events():
+    return Response(content=json.dumps(serialized_events_store()),status_code=200,media_type="application/json")
 
 @app.get("{full_path:path}")
 def catch_all(full_path : str):
