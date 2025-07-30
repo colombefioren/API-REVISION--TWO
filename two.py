@@ -33,6 +33,10 @@ def serialized_events_store():
         converted_event.append(event.model_dump())
     return converted_event
 
+@app.get("/events")
+def get_events():
+    return Response(content=json.dumps(serialized_events_store()),status_code=200,media_type="application/json")
+
 @app.post("/events")
 def add_event(event_list : List[Event]):
     for event in event_list:
