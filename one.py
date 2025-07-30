@@ -70,12 +70,6 @@ def serialized_events_store():
 def get_events():
     return Response(content=json.dumps(serialized_events_store()),status_code=200,media_type="application/json")
 
-@app.get("{full_path:path}")
-def catch_all(full_path : str):
-    with open("not_found.html","r",encoding="utf-8") as file:
-        html_content = file.read()
-        return Response(content=html_content,status_code=404,media_type="text/html")
-
 @app.post("/events")
 def add_event(event_list : List[EventModel]):
     for event in event_list:
@@ -89,3 +83,11 @@ def delete_event(event_name : str):
             events_store.remove(event)
             return Response(content=json.dumps({"message":f"Event {event_name} deleted successfully!"}),status_code=200)
     return Response(content=json.dumps({"message":f"Event {event_name} not found!"}),status_code=404)
+
+
+
+@app.get("{full_path:path}")
+def catch_all(full_path : str):
+    with open("not_found.html","r",encoding="utf-8") as file:
+        html_content = file.read()
+        return Response(content=html_content,status_code=404,media_type="text/html")
