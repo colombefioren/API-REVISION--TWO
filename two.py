@@ -34,7 +34,7 @@ def serialized_events_store():
     return converted_event
 
 @app.post("/events")
-def add_event(event_list : List[Event])
+def add_event(event_list : List[Event]):
     for event in event_list:
         events_store.append(event)
     return Response(content=json.dumps(serialized_events_store()),status_code=201,media_type="application/json")
