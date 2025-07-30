@@ -20,8 +20,10 @@ def read_root(request : Request,name: str = "Non défini(e)",is_teacher : bool =
 @app.get("/top-secret")
 def read_top_secret(request : Request):
     key_value = request.headers.get("Authorization")
-    if key_value is None or key_value != "my-secret-key":
-        return Response(content=json.dumps({"message":f"{key_value} is not the secret key!"}),status_code=403)
+    if key_value is None:
+        return Response(content=json.dumps({"message":f"You did not provide the secret key!"}),status_code=403)
+    elif key_value != "my-secret-key":
+        return Response(content=json.dumps({"message":f"You did not provide the correct secret key : {key_value}"}),status_code=403)
     return Response(content=json.dumps({"message":"Hello Top Secret!"}),status_code=200)
 
 
