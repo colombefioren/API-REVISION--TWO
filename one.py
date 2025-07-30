@@ -75,3 +75,9 @@ def catch_all(full_path : str):
     with open("not_found.html","r",encoding="utf-8") as file:
         html_content = file.read()
         return Response(content=html_content,status_code=404,media_type="text/html")
+
+@app.post("/events")
+def add_event(event_list : List[EventModel]):
+    for event in event_list:
+        events_store.append(event)
+    return Response(content=json.dumps(serialized_events_store()),status_code=201)
