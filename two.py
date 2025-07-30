@@ -64,8 +64,8 @@ def modify_event(event_list : List[Event]):
     return Response(content=json.dumps(serialized_events_store()),status_code=200,media_type="application/json")
 
 class EventUpdated(BaseModel):
-    name : Optional[str] = None,
-    start_date : Optional[str] = None,
+    name : Optional[str] = None
+    start_date : Optional[str] = None
     end_date : Optional[str] = None
 
 
@@ -79,5 +79,5 @@ def update_event(events_id : int,event_updated : EventUpdated):
                 event.start_date = event_updated.start_date
             if event_updated.end_date is not None:
                 event.end_date = event_updated.end_date
-            return Response(content=json.dumps(serialized_events_store()),status_code=200,media_type="application/json")
+            return Response(content=json.dumps(event.model_dump()),status_code=200,media_type="application/json")
     return Response(content=json.dumps({"message":f"Event with id {events_id} not found!"}),status_code=404,media_type="application/json")
